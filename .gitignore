@@ -116,3 +116,4 @@ src/btcgpu.creator
 src/btcgpu.config
 src/bitcoind
 src/bitcoin-cli
+src/btcgpu.files

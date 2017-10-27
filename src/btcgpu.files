@@ -77,6 +77,8 @@ crypto/ctaes/bench.c
 crypto/ctaes/ctaes.c
 crypto/ctaes/ctaes.h
 crypto/ctaes/test.c
+crypto/equihash.cpp
+crypto/equihash.h
 crypto/hmac_sha256.cpp
 crypto/hmac_sha256.h
 crypto/hmac_sha512.cpp
