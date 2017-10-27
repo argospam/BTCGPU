@@ -50,17 +50,36 @@ recommended but it is possible to compile the 32-bit version.
 Cross-compilation
 -------------------
 
-These steps can be performed on, for example, an Ubuntu VM. The depends system
+These steps can be performed on, for example, an Ubuntu 14.04 VM. The depends system
 will also work on other Linux distributions, however the commands for
 installing the toolchain will be different.
 
-First, install the general dependencies:
+In your configure.ac, make sure your libtool initialization looks like:
 
-    sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils curl
+LT_INIT([win32-dll])
+
+
+
+First install the toolchains:
+
+sudo apt-get install git curl build-essential libtool autotools-dev automake pkg-config bsdmainutils libdb++-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3
+
 
 A host toolchain (`build-essential`) is necessary because some dependency
 packages (such as `protobuf`) need to build host utilities that are used in the
 build process.
+
+## Install libsodium on Ubuntu 14.04
+
+    sudo add-apt-repository ppa:chris-lea/libsodium
+    sudo echo "deb http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main" >> sudo /etc/apt/sources.list
+    sudo echo "deb-src http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main" >> sudo /etc/apt/sources.list
+    sudo apt-get update && sudo apt-get install libsodium-dev
+
+## Install libsodium on Ubuntu 16.04
+
+    sudo apt install libsodium-dev
+
 
 ## Building for 64-bit Windows
 
@@ -73,9 +92,12 @@ Then build using:
     cd depends
     make HOST=x86_64-w64-mingw32
     cd ..
-    ./autogen.sh # not required when building from tarball
-    CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/
-    make
+    cd src/secp256k1
+    make HOST=x86_64-w64-mingw32
+    cd ../..
+    ./autogen.sh 
+    ./configure --prefix=`pwd`/depends/i686-w64-mingw32 --with-incompatible-bdb
+    makes
 
 ## Building for 32-bit Windows
 
@@ -89,7 +111,7 @@ Then build using:
     make HOST=i686-w64-mingw32
     cd ..
     ./autogen.sh # not required when building from tarball
-    CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/
+    CONFIG_SITE=$PWD/depends/i686-w64-mingw32/share/config.site ./configure --prefix=/   
     make
 
 ## Depends system
@@ -105,3 +127,4 @@ as they appear in the release `.zip` archive. This can be done in the following
 way. This will install to `c:\workspace\bitcoin`, for example:
 
     make install DESTDIR=/mnt/c/workspace/bitcoin
+
