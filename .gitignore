@@ -117,3 +117,8 @@ src/btcgpu.config
 src/bitcoind
 src/bitcoin-cli
 src/btcgpu.files
+src/argospan_btcgpu.config
+src/argospan_btcgpu.config
+src/argospan_btcgpu.creator
+src/argospan_btcgpu.files
+src/argospan_btcgpu.includes
