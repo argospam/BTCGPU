@@ -577,8 +577,14 @@ const fs::path &GetDataDir(bool fNetSpecific)
     if (fNetSpecific)
         path /= BaseParams().DataDir();
 
-    fs::create_directories(path);
-
+    auto status = fs::status(path);
+    if (status.type() == fs::symlink_file)
+    {
+        path = boost::filesystem::canonical(path);
+    }
+    if (!fs::exists(path) && !fs::is_directory(path)) {
+        fs::create_directories(path);
+    }
     return path;
 }
 
