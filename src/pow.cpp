@@ -51,7 +51,6 @@ unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg, int64_t nLastBlockTi
     
     // Limit adjustment
     int64_t nActualTimespan = nLastBlockTime - nFirstBlockTime;
-    nActualTimespan = params.AveragingWindowTimespan() + (nActualTimespan - params.AveragingWindowTimespan())/4;
     
     if (nActualTimespan < params.MinActualTimespan())
         nActualTimespan = params.MinActualTimespan();
@@ -76,7 +75,7 @@ unsigned int BitcoinGetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 {
     assert(pindexLast != nullptr);
     unsigned int nProofOfWorkLimit = UintToArith256(params.PowLimit(false)).GetCompact();
-
+    
     // Only change once per difficulty adjustment interval
     if ((pindexLast->nHeight+1) % params.DifficultyAdjustmentInterval() != 0)
     {

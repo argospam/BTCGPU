@@ -102,10 +102,13 @@ public:
         consensus.BitcoinPostforkTime = 1508808039;
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.powLimitLegacy = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowAveragingWindow = 17;
+        
+        //based on https://github.com/BTCGPU/BTCGPU/issues/78
+        consensus.nPowAveragingWindow = 40;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
-        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
-        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
+        consensus.nPowMaxAdjustDown = 12; // 12% adjustment down
+        consensus.nPowMaxAdjustUp = 12; // 12% adjustment up
+        
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60;; // 10 minutes
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -137,10 +140,15 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xf9;
-        pchMessageStart[1] = 0xbe;
-        pchMessageStart[2] = 0xb4;
-        pchMessageStart[3] = 0xd9;
+        pchMessageStartLegacy[0] = 0xf9;
+        pchMessageStartLegacy[1] = 0xbe;
+        pchMessageStartLegacy[2] = 0xb4;
+        pchMessageStartLegacy[3] = 0xd9;
+
+        pchMessageStart[0] = 0xe1;
+        pchMessageStart[1] = 0x47;
+        pchMessageStart[2] = 0x6d;
+        pchMessageStart[3] = 0x44;
         nDefaultPort = 8338; // different port than Bitcoin
         nBitcoinDefaultPort = 8333;
         nPruneAfterHeight = 100000;
@@ -153,15 +161,6 @@ public:
         consensus.hashGenesisBlock = genesis.GetHash(consensus);
         assert(consensus.hashGenesisBlock == uint256S("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"));
         assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
-
-        // Note that of those with the service bits flag, most only support a subset of possible options
-        // TODO: Shall change this to our
-        vSeeds.emplace_back("seed.bitcoin.sipa.be", true); // Pieter Wuille, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("dnsseed.bluematt.me", true); // Matt Corallo, only supports x9
-        vSeeds.emplace_back("dnsseed.bitcoin.dashjr.org", false); // Luke Dashjr
-        vSeeds.emplace_back("seed.bitcoinstats.com", true); // Christian Decker, supports x1 - xf
-        vSeeds.emplace_back("seed.bitcoin.jonasschnelli.ch", true); // Jonas Schnelli, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("seed.btc.petertodd.org", true); // Peter Todd, only supports x1, x5, x9, and xd
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,38);  // prefix: G
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,23);  // prefix: A
@@ -223,12 +222,15 @@ public:
         consensus.BTGPremineWindow = 200;
         consensus.BitcoinPostforkBlock = uint256S("00000000ef93c2d9bac8da61ff11a699a5b815f77a194c567c5de0dbdf0bf28b");
         consensus.BitcoinPostforkTime = 1508111338;
-        consensus.powLimit = uint256S("07ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.powLimitLegacy = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowAveragingWindow = 17;
+        
+        //based on https://github.com/BTCGPU/BTCGPU/issues/78
+        consensus.nPowAveragingWindow = 40;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
-        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
-        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
+        consensus.nPowMaxAdjustDown = 12; // 12% adjustment down
+        consensus.nPowMaxAdjustUp = 12; // 12% adjustment up
+        
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -255,10 +257,16 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000002e9e7b00e1f6dc5123a04aad68dd0f0968d8c7aa45f6640795c37b1"); //1135275
 
-        pchMessageStart[0] = 0x0b;
-        pchMessageStart[1] = 0x11;
-        pchMessageStart[2] = 0x09;
-        pchMessageStart[3] = 0x07;
+        
+        pchMessageStartLegacy[0] = 0x0b;
+        pchMessageStartLegacy[1] = 0x11;
+        pchMessageStartLegacy[2] = 0x09;
+        pchMessageStartLegacy[3] = 0x07;
+
+        pchMessageStart[0] = 0xe0;
+        pchMessageStart[1] = 0x47;
+        pchMessageStart[2] = 0x6d;
+        pchMessageStart[3] = 0x44;
         nDefaultPort = 18338;
         nBitcoinDefaultPort = 18333;
         nPruneAfterHeight = 1000;
@@ -275,10 +283,9 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnet-seed.bitcoin.jonasschnelli.ch", true);
-        vSeeds.emplace_back("seed.tbtc.petertodd.org", true);
-        vSeeds.emplace_back("testnet-seed.bluematt.me", false);
-        vSeeds.emplace_back("testnet-seed.bitcoin.schildbach.de", false);
+
+        vSeeds.emplace_back("eu-test-dnsseed.bitcoingold-official.org", true);
+        vSeeds.emplace_back("btg.dnsseed.minertopia.org", true);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -329,9 +336,10 @@ public:
         consensus.BitcoinPostforkTime = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.powLimitLegacy = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowAveragingWindow = 17;
-        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
-        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
+        //based on https://github.com/BTCGPU/BTCGPU/issues/78
+        consensus.nPowAveragingWindow = 40;
+        consensus.nPowMaxAdjustDown = 12; // 12% adjustment down
+        consensus.nPowMaxAdjustUp = 12; // 12% adjustment up
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -354,10 +362,16 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
+        pchMessageStartLegacy[0] = 0xfa;
+        pchMessageStartLegacy[1] = 0xbf;
+        pchMessageStartLegacy[2] = 0xb5;
+        pchMessageStartLegacy[3] = 0xda;
+        
         pchMessageStart[0] = 0xfa;
         pchMessageStart[1] = 0xbf;
         pchMessageStart[2] = 0xb5;
         pchMessageStart[3] = 0xda;
+
         nDefaultPort = 18444;
         nBitcoinDefaultPort = 18444;
         nPruneAfterHeight = 1000;
