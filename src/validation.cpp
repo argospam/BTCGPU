@@ -93,7 +93,7 @@ static void CheckBlockIndex(const Consensus::Params& consensusParams);
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const std::string strMessageMagic = "Bitcoin Signed Message:\n";
+const std::string strMessageMagic = "Bitcoin Gold Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -1072,6 +1072,8 @@ bool IsInitialBlockDownload()
         return true;
     if (chainActive.Tip()->nChainWork < UintToArith256(chainParams.GetConsensus().nMinimumChainWork))
         return true;
+    if (fSkipHardforkIBD && chainActive.Tip()->nHeight + 1 >= (int)chainParams.GetConsensus().BTGHeight)
+        return false;
     int64_t target_time = fBTGBootstrapping ? (int64_t)chainParams.GetConsensus().BitcoinPostforkTime : GetTime();
     if (chainActive.Tip()->GetBlockTime() < (target_time - nMaxTipAge))
         return true;
@@ -3013,22 +3015,6 @@ static bool ContextualCheckBlock(const CBlock& block, CValidationState& state, c
         if (block.vtx[0]->vin[0].scriptSig.size() < expect.size() ||
             !std::equal(expect.begin(), expect.end(), block.vtx[0]->vin[0].scriptSig.begin())) {
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-height", false, "block height mismatch in coinbase");
-        }
-    }
-
-    if (nHeight >= consensusParams.BTGHeight &&
-            nHeight < consensusParams.BTGHeight + consensusParams.BTGPremineWindow) {
-        if (block.vtx.size() != 1) {
-            return state.DoS(
-                100, error("%s: no transaction allowed in premine window",__func__),
-                REJECT_INVALID, "premine-no-tx-allowed");
-        }
-        const CTxOut& output = block.vtx[0]->vout[0];
-        bool valid = Params().IsPremineAddressScript(output.scriptPubKey);
-        if (!valid) {
-            return state.DoS(
-                100, error("%s: not in premine whitelist", __func__),
-                REJECT_INVALID, "cb-not-premine-whitelist");
         }
     }
 
