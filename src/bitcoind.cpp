@@ -112,8 +112,8 @@ bool AppInit(int argc, char* argv[])
         try {
             const std::string chain = ChainNameFromCommandLine();
             SelectParams(chain);
-            if (chain == CBaseChainParams::MAIN)
-                throw std::runtime_error("mainnet is not ready for launch.");
+            //if (chain == CBaseChainParams::MAIN)
+            //    throw std::runtime_error("mainnet is not ready for launch.");
         } catch (const std::exception& e) {
             fprintf(stderr, "Error: %s\n", e.what());
             return false;

@@ -644,8 +644,8 @@ int main(int argc, char *argv[])
     try {
         const std::string chain = ChainNameFromCommandLine();
         SelectParams(chain);
-        if (chain == CBaseChainParams::MAIN)
-            throw std::runtime_error("mainnet is not ready for launch.");
+        //if (chain == CBaseChainParams::MAIN)
+        //    throw std::runtime_error("mainnet is not ready for launch.");
     } catch(std::exception &e) {
         QMessageBox::critical(0, QObject::tr(PACKAGE_NAME), QObject::tr("Error: %1").arg(e.what()));
         return EXIT_FAILURE;
