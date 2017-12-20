@@ -168,8 +168,8 @@ public:
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
 
-        vSeeds.emplace_back("eu-dnsseed.bitcoingold-official.org", true);
         vSeeds.emplace_back("dnsseed.bitcoingold.org", true);
+        vSeeds.emplace_back("eu-dnsseed.bitcoingold-official.org", true);
         vSeeds.emplace_back("dnsseed.btcgpu.org", true);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,38);  // prefix: G
